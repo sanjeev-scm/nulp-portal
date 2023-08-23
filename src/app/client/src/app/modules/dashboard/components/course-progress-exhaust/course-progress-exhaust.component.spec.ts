@@ -23,3 +23,4 @@ describe('CourseProgressExhaustComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+ 

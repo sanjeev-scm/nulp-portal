@@ -17,7 +17,7 @@ export * from './map/map.component';
 export * from './filter/filter.component';
 export * from './all-dashboard/all-dashboard.component';
 
-
+ 
 // export * from './content-creation-statics/content-creation-statics.component';
 export * from './city-wise-report/city-wise-report.component';
 export * from './dept-city-wise-report/dept-city-wise-report.component';

@@ -113,7 +113,7 @@ export class CourseProgressService  {
       }
     };
   }
-
+ 
     // if ( _.get(requestParam, 'sortBy')) {
     //   option.param['sortBy'] = requestParam.sortBy;
     //   option.param['sortOrder'] = requestParam.sortOrder;

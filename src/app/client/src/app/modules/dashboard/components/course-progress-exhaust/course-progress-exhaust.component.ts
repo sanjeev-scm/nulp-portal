@@ -594,4 +594,4 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
       };
     }
   }
-}
+} 

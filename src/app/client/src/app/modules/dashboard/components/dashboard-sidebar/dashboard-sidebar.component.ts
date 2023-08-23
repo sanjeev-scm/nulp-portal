@@ -56,4 +56,4 @@ export class DashboardSidebarComponent implements OnInit {
         ver: _.get(this.activatedRoute.snapshot, 'data.telemetry.object.ver'),
       };
     }
-}
+} 
