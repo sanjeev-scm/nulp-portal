@@ -28,6 +28,7 @@ import { DiscussionModule } from '../discussion/discussion.module';
 import { PendingchangesGuard } from '@sunbird/public';
 import { GroupsModule } from '../groups';
 import { CourseProgressReportsComponent } from './components/course-consumption/course-progress-reports/course-progress-reports.component';
+import { CourseProgressExhaustModule } from '../dashboard/course-progress-exhaust.module';
 
 export const csUserServiceFactory = (csLibInitializerService: CsLibInitializerService) => {
   if (!CsModule.instance.isInitialised) {
@@ -64,7 +65,8 @@ export const csNotificationServiceFactory = (csLibInitializerService: CsLibIniti
     CommonConsumptionModule,
     NotificationModule,
     DiscussionModule,
-    GroupsModule
+    GroupsModule,
+    CourseProgressExhaustModule
   ],
   providers: [
     { provide: 'CS_USER_SERVICE', useFactory: csUserServiceFactory, deps: [CsLibInitializerService] },

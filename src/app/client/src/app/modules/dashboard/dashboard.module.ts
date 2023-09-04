@@ -54,6 +54,7 @@ import { OrgManagementModule } from '@sunbird/org-management';
 import { CertificateDirectivesModule } from 'sb-svg2pdf';
 import { CsModule } from '@project-sunbird/client-services';
 import { CsLibInitializerService } from 'CsLibInitializer';
+import { CourseProgressExhaustModule } from './course-progress-exhaust.module';
 
 export const csCourseServiceFactory = (csLibInitializerService: CsLibInitializerService) => {
   if (!CsModule.instance.isInitialised) {
@@ -91,15 +92,16 @@ export const csCourseServiceFactory = (csLibInitializerService: CsLibInitializer
     CoreModule,
     ChartModule,
     CertificateDirectivesModule,
-    OrgManagementModule
+    OrgManagementModule,
+    CourseProgressExhaustModule
   ],
   declarations: [CourseConsumptionComponent, OrganisationComponent, CourseProgressComponent, UsageReportsComponent,
     DataTableComponent, DataChartComponent, ListAllReportsComponent, ReportSummaryComponent, ReportComponent, AddSummaryModalComponent,
     CourseDashboardComponent, ReIssueCertificateComponent, DashboardSidebarComponent, DatasetComponent, MapComponent, FilterComponent,
     SbTableComponent, AddusersComponent, AllReportsComponent, UserReportComponent, ContentLeaderboardComponent,UserUploadComponent,
     CourseContentLeaderboardComponent, FileuploadComponent, CertificateTemplateUploadComponent, ReportsComponent,OrganizationReportComponent,ContentReportComponent, ContentCategoryWiseComponent,
-    CourseReportComponent,CourseCategoryWiseComponent, ContentCreationStaticsComponent,CityWiseReportComponent, DeptCityWiseReportComponent, ContentDeptWiseReportComponent, CourseProgressExhaustComponent],
-  exports: [CourseProgressComponent, DataTableComponent, CourseProgressExhaustComponent],
+    CourseReportComponent,CourseCategoryWiseComponent, ContentCreationStaticsComponent,CityWiseReportComponent, DeptCityWiseReportComponent, ContentDeptWiseReportComponent],
+  exports: [CourseProgressComponent, DataTableComponent],
   providers: [
     RendererService,
     UserSearchService,

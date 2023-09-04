@@ -20,6 +20,8 @@ import { IBatchListData, ICourseProgressData, IForumContext } from '../../interf
 import { CourseProgressService, UsageService } from '../../services';
 import { courseProgressData } from "./data";
 import { Course } from '@project-sunbird/client-services/models';
+import { ExportCsvService } from './../../services/course-progress/export-csv.service';
+
 
 @Component({
   selector: 'app-course-progress-exhaust',
@@ -201,7 +203,7 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
   */
   showCourseData = false;
 
-
+  
   /**
 	 * telemetryImpression object for course progress page
 	*/
@@ -211,11 +213,13 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
   isDownloadReport = false;
   stateWiseReportData = [];
   public message = 'There is no data available';
-  columns = [
-    { name: 'State', isSortable: true, prop: 'state', placeholder: 'Filter state' },
-    { name: 'District', isSortable: true, prop: 'district', placeholder: 'Filter district' },
-    { name: 'No. of Enrolment', isSortable: false, prop: 'noOfEnrollments', placeholder: 'Filter enrollment' }];
+  // columns = [
+  //   { name: 'State', isSortable: true, prop: 'state', placeholder: 'Filter state' },
+  //   { name: 'District', isSortable: true, prop: 'district', placeholder: 'Filter district' },
+  //   { name: 'No. of Enrolment', isSortable: false, prop: 'noOfEnrollments', placeholder: 'Filter enrollment' }];
   
+  columns: string[] = [];
+  fileName = 'course-progress-exhaust-data';
   
   userRoles;
   
@@ -239,6 +243,7 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
     public onDemandReportService: OnDemandReportService,
     public formService: FormService,
     public navigationhelperService: NavigationHelperService, private usageService: UsageService,
+    public exportCsvService: ExportCsvService
    ) {
     this.user = user;
     this.route = route;
@@ -401,18 +406,18 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
         }
       );
       // API call will be made to get the data
-      // this.courseProgressExhaustData = courseProgressData.result.content;
-      // this.courseProgressExhaustData.map((courseProgressData) => {
-      //   courseProgressData.issued_certificate = 'No';
-      //   if (courseProgressData?.issued_certificates?.name) {
-      //     courseProgressData.issued_certificate = 'Yes';
-      //   }
-      //   return courseProgressData;
-      // });
-      // this.totalCount = courseProgressData.result.total_items
-      // this.pager = this.paginationService.getPager(this.totalCount, this.pageNumber, 5);
-      // this.showLoader = false;
-      // this.noResult = false;      
+      this.courseProgressExhaustData = courseProgressData.result.content;
+      this.courseProgressExhaustData.map((courseProgressData) => {
+        courseProgressData.issued_certificate = 'No';
+        if (courseProgressData?.issued_certificates?.name) {
+          courseProgressData.issued_certificate = 'Yes';
+        }
+        return courseProgressData;
+      });
+      this.totalCount = courseProgressData.result.total_items
+      this.pager = this.paginationService.getPager(this.totalCount, this.pageNumber, 5);
+      this.showLoader = false;
+      this.noResult = false;      
     }
 
   /**
@@ -436,13 +441,6 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
     this.populateCourseProgressExhaustData(batch);
   }
 
-
-  /**
-   * Method to update the url with selected query params
-   */
-  navigate(): void {
-    this.route.navigate([], { queryParams: this.queryParams });
-  }
   redirect() {
     this.route.navigate(['/learn/course', this.courseId]);
   }
@@ -470,7 +468,7 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
  // TODO: This function will be removed. API got deprecated.
   populateCourseDashboardData(batch?: any): void {
     return ;
-    if (!batch && this.currentBatch) {
+/*    if (!batch && this.currentBatch) {
       batch = this.currentBatch;
     }
     this.showWarningDiv = false;
@@ -513,7 +511,7 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
           this.toasterService.error(err.error.params.errmsg);
           this.showLoader = false;
         }
-      );
+      ); */
   }
 
   
@@ -522,14 +520,10 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
       return;
     }
     this.pageNumber = page;
-    this.queryParams.pageNumber = this.pageNumber;
-    this.navigate();
-    if (this.currentBatch) {
-      this.populateCourseProgressExhaustData(this.currentBatch);
-    }
-  }    // if (!batch) {
-    //   option.batchId === undefined;
-    // }
+    const isBatchExist = _.find(this.batchlist, (batch) => batch.id === this.queryParams.batchIdentifier);
+    this.currentBatch = isBatchExist;
+    this.populateCourseProgressExhaustData(this.currentBatch);
+  }   
 
   keyup(event) {
     // debugger;
@@ -642,7 +636,127 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
     }
   }
 
-  // keyup(query) {
+  exportToCsv(batch: any) {
+    let option: any;
+    this.columns = this.getColumns();
+    // If there are multiple batches and none of the batch is selected.
+    if (this.showCourseData) {
+      option = {
+        courseId: this.courseId,
+        limit: this.pageLimit,
+        offset: (this.pageNumber - 1) * (this.pageLimit),
+      }
+      this.fileName = this.courseId;
+    } else {
+      option = {
+        courseId: this.courseId,
+        batchId: batch.batchId,
+        limit: this.pageLimit,
+        offset: (this.pageNumber - 1) * (this.pageLimit),
+      }
+      this.fileName = this.fileName + '_' + this.batchId;
+    }
 
-  // }
+    if (this.searchText) {
+      option.query = this.searchText;
+      this.fileName = this.fileName + '_'  + this.searchText;
+    }
+
+    this.fileName = this.fileName + '_' + new Date('DD-MM-YYYY');
+
+    // if (this.order) {
+    //   option.sortBy = this.order;
+    //   option.sortOrder = this.reverse ? 'desc' : 'asc';
+    // }
+    // if (this.searchText) {
+    //   option.username = this.searchText;
+    // }
+    this.courseProgressService.getExportData(option).pipe(
+      takeUntil(this.unsubscribe))
+      .subscribe(
+        (apiResponse: ServerResponse) => {
+          if (!apiResponse.result.count && _.get(apiResponse, 'result.data.length')) {
+            apiResponse.result.count = _.get(apiResponse, 'result.data.length');
+          } else {
+            apiResponse.result.count = 0;
+          }
+          this.showLoader = false;
+          this.courseProgressExhaustData = apiResponse.result.content;
+          this.courseProgressExhaustData.map((courseProgressData) => {
+            courseProgressData.issued_certificate = 'No';
+            if (courseProgressData?.issued_certificates?.name) {
+              courseProgressData.issued_certificate = 'Yes';
+            }
+            return courseProgressData;
+          });
+
+          this.totalCount = apiResponse.result.total_items;
+
+          // // API call will be made to get the data
+          // this.courseProgressExhaustData = courseProgressData.result.content;
+
+          // this.totalCount = courseProgressData.result.total_items
+          this.pager = this.paginationService.getPager(this.totalCount, this.pageNumber, 5);
+          this.showLoader = false;
+          this.noResult = false;
+
+          // this.showDownloadLink = apiResponse.result.showDownloadLink ? apiResponse.result.showDownloadLink : false;
+          // this.dashboarData.count = _.get(batch, 'participantCount') || _.get(apiResponse, 'result.data.length');
+          // this.totalCount = _.get(batch, 'participantCount') || _.get(apiResponse, 'result.data.length');
+          // if (this.totalCount >= 10000) {
+          //   this.pager = this.paginationService.getPager(10000, this.pageNumber, this.config.appConfig.DASHBOARD.PAGE_LIMIT);
+          // } else {
+          //   this.pager = this.paginationService.getPager(
+          //     apiResponse.result.count, this.pageNumber, this.config.appConfig.DASHBOARD.PAGE_LIMIT);
+          // }
+        },
+        err => {
+          this.toasterService.error(err.error.params.errmsg);
+          this.showLoader = false;
+
+          // API call will be made to get the data
+          // this.courseProgressExhaustData = courseProgressData.result.content;
+
+          // this.totalCount = courseProgressData.result.total_items
+          // this.pager = this.paginationService.getPager(this.totalCount, this.pageNumber, 5);
+          // this.showLoader = false;
+          // this.noResult = false;
+          //---- The above code is for testing purpose only          
+        }
+      );
+
+    // API call will be made to get the data
+    this.courseProgressExhaustData = courseProgressData.result.content;
+    this.courseProgressExhaustData.map((courseProgressData) => {
+      courseProgressData.issued_certificate = 'No';
+      if (courseProgressData?.issued_certificates?.name) {
+        courseProgressData.issued_certificate = 'Yes';
+      }
+      return courseProgressData;
+    });
+    this.totalCount = courseProgressData.result.total_items
+    this.pager = this.paginationService.getPager(this.totalCount, this.pageNumber, 5);
+    this.showLoader = false;
+    this.noResult = false;
+    this.exportCsvService.downloadFile(this.courseProgressExhaustData, this.columns, this.fileName);
+  }
+
+  getColumns() {
+    this.columns = [];
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustUserName);
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustEmail);
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustPhoneNo);
+    if (this.showCourseData) {
+      this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchId);
+      this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchName);
+      this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchStartDate);
+      this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchEndDate);
+    }
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustEnrollDate);
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustCompletedOn);
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustProgress);
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustCompletedPercentage);
+    this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustIssuedCertificate);
+    return this.columns;
+  }
 } 

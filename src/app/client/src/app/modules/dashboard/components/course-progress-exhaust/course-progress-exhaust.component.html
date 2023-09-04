@@ -1,3 +1,5 @@
+<!-- <app-test-shared></app-test-shared> -->
+
 <!--
 <sui-modal class="sb-modal sb-success" (dismissed)="modal.deny(); showDownloadModal = false;" #modal
   *ngIf="showDownloadModal">
@@ -138,6 +140,15 @@
             <i class="circular search link icon"></i>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="seven wide column pt-0 pl-0">
+      <div class="ui-helper-clearfix export-btns">
+        <button type="button" style="float:right" icon="fa fa-file"
+          class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-left" pbutton="" iconPos="left"
+          label="Export" (click)="exportCsvService.downloadFile(courseProgressExhaustData, columns, fileName)"><span aria-hidden="true"
+            class="ui-button-icon-left ui-clickable fa fa-file"></span><span
+            class="ui-button-text ui-clickable">Export</span></button>
       </div>
     </div>
   </div>

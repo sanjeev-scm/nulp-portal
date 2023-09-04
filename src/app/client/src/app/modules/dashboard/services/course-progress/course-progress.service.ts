@@ -80,56 +80,64 @@ export class CourseProgressService  {
 
 
   /**
-   * To method calls the get dashboard API
+   * To method calls the get the course progress exhaust data
    */
   getCourseProgressExhaustData(requestParam) {
 
-/* working    
-    const option = {
-      url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/'  + requestParam.courseId + '/' + requestParam.batchId,
-      param: {
-        limit: requestParam.limit,
-        offset: requestParam.offset,
-      }
-    };
-*/
-  // debugger;
-  let option: any;
-  if (requestParam.batchId !== undefined) {  
-    option = {
-      url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/'  + requestParam.courseId + '/' + requestParam.batchId,
-      param: {
-        limit: requestParam.limit,
-        offset: requestParam.offset,
-      }
-    };
-  }
-  else {
-    option = {
-      url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/'  + requestParam.courseId,
-      param: {
-        limit: requestParam.limit,
-        offset: requestParam.offset,
-      }
-    };
-  }
-  if ( _.get(requestParam, 'query')) {
-    option.param['query'] = requestParam.query;
-  }
+    let option: any;
+    if (requestParam.batchId !== undefined) {
+      option = {
+        url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/' + requestParam.courseId + '/' + requestParam.batchId,
+        param: {
+          limit: requestParam.limit,
+          offset: requestParam.offset,
+        }
+      };
+    }
+    else {
+      option = {
+        url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/' + requestParam.courseId,
+        param: {
+          limit: requestParam.limit,
+          offset: requestParam.offset,
+        }
+      };
+    }
+    if (_.get(requestParam, 'query')) {
+      option.param['query'] = requestParam.query;
+    }
     // if ( _.get(requestParam, 'sortBy')) {
     //   option.param['sortBy'] = requestParam.sortBy;
     //   option.param['sortOrder'] = requestParam.sortOrder;
     // }
-    // if ( _.get(requestParam, 'username')) {
-    //   option.param['userName'] = requestParam.username;
+
+    return this.learnerService.get(option);
+  }
+
+
+  /**
+   * To method calls the get the course progress export data
+   */
+  getExportData(requestParam) {
+
+    let option: any;
+    if (requestParam.batchId !== undefined) {
+      option = {
+        url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/' + requestParam.courseId + '/' + requestParam.batchId + '/exportAsCsv'
+      };
+    }
+    else {
+      option = {
+        url: this.config.urlConFig.URLS.BATCH.COURSE_PROGRESS_EXHAUST + '/' + requestParam.courseId + '/exportAsCsv'
+      };
+    }
+    if (_.get(requestParam, 'query')) {
+      option.param['query'] = requestParam.query;
+    }
+    // if ( _.get(requestParam, 'sortBy')) {
+    //   option.param['sortBy'] = requestParam.sortBy;
+    //   option.param['sortOrder'] = requestParam.sortOrder;
     // }
-    // return this.learnerService.get(option);
-
-    // const params = new HttpParams()
-    // .set('courseid', requestParam.courseId)
-    // .set('batchid', requestParam.batchId)
-    // .set('limit', requestParam.limit);
-
     return this.learnerService.get(option);
   }
 
