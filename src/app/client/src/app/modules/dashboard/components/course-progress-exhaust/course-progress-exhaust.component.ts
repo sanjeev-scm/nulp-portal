@@ -22,7 +22,6 @@ import { courseProgressData } from "./data";
 import { Course } from '@project-sunbird/client-services/models';
 import { ExportCsvService } from './../../services/course-progress/export-csv.service';
 
-
 @Component({
   selector: 'app-course-progress-exhaust',
   templateUrl: './course-progress-exhaust.component.html',
@@ -364,9 +363,9 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
           this.showLoader = false;
           this.courseProgressExhaustData = apiResponse.result.content;
           this.courseProgressExhaustData.map((courseProgressData) => {
-            courseProgressData.issued_certificate = 'No';
+            courseProgressData.issued_certificates.issued_certificate = 'No';
             if (courseProgressData?.issued_certificates?.name) {
-              courseProgressData.issued_certificate = 'Yes';
+              courseProgressData.issued_certificates.issued_certificate = 'Yes';
             }
             return courseProgressData;
           });
@@ -742,7 +741,22 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
   }
 
   getColumns() {
-    this.columns = [];
+    this.columns = [
+      'userName',
+      'maskedemail',
+      'maskedphone',
+      'coursename',
+      'batchname',
+      'batch_start_date',
+      'batch_end_date',
+      'enrolled_date',
+      'completedon',
+      'progress',
+      'completionpercentage',
+      'issued_certificates'  // Need to check this
+    ];
+
+/*
     this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustUserName);
     this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustEmail);
     this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustPhoneNo);
@@ -757,6 +771,7 @@ export class CourseProgressExhaustComponent implements OnInit, OnDestroy { //, A
     this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustProgress);
     this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustCompletedPercentage);
     this.columns.push(this.resourceService?.frmelmnts?.lbl?.courseProgressExhaustIssuedCertificate);
+*/    
     return this.columns;
   }
 } 

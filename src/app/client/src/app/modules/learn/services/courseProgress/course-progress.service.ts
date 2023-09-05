@@ -9,7 +9,7 @@ import dayjs from 'dayjs';
 @Injectable({
   providedIn: 'root'
 })
-
+ 
 export class CourseProgressService {
   /**
  * Reference of content service.

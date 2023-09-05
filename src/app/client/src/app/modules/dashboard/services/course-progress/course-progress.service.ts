@@ -114,7 +114,7 @@ export class CourseProgressService  {
     return this.learnerService.get(option);
   }
 
-
+  
   /**
    * To method calls the get the course progress export data
    */

@@ -1,4 +1,4 @@
-export const courseProgressData = {
+export const courseProgressData = { 
     "result": {
         "total_pages": 5,
         "current_page": 2,

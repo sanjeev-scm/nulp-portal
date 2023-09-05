@@ -20,7 +20,7 @@ const routes: Routes = [
       menuBar: {
         visible: false
       }
-    }
+    } 
   }, {
     path: '', component: CourseConsumptionPageComponent,
     data: { telemetry: { env: telemetryEnv } },

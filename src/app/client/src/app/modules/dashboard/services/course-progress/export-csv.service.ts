@@ -9,7 +9,7 @@ export class ExportCsvService {
 
     constructor(private resourceService: ResourceService) {
     }
-
+ 
     downloadFile(data, columns, filename) {
         let csvData = this.ConvertToCSV(data, columns);
         console.log(csvData)

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CourseProgressExhaustComponent } from './course-progress-exhaust.component';
-
+ 
 describe('CourseProgressExhaustComponent', () => {
   let component: CourseProgressExhaustComponent;
   let fixture: ComponentFixture<CourseProgressExhaustComponent>;

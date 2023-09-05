@@ -544,7 +544,7 @@ export class CourseConsumptionHeaderComponent implements OnInit, AfterViewInit, 
   isValidEnrollmentEndDate(enrollmentEndDate) {
     return !!enrollmentEndDate;
   }
-
+ 
   getAllBatchDetails() {
     this.batchList = [];
     const searchParams: any = {
@@ -607,7 +607,7 @@ export class CourseConsumptionHeaderComponent implements OnInit, AfterViewInit, 
     // debugger;
     this.selectedReport = _.get(ev, 'value');
     // this.router.navigate(['learn/course', this.courseId, 'dashboard', 'courseProgressExhaust']);
-    this.router.navigate(['learn/course', this.courseId, 'courseProgressReports']);
+    this.router.navigate(['learn/course', this.courseId, 'courseProgressExhaust']);
   }
   
 }

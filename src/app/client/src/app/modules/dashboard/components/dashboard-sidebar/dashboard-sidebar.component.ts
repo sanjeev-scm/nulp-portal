@@ -9,7 +9,7 @@ import * as _ from 'lodash-es';
   selector: 'app-dashboard-sidebar',
   templateUrl: './dashboard-sidebar.component.html',
   styleUrls: ['./dashboard-sidebar.component.scss']
-})
+}) 
 export class DashboardSidebarComponent implements OnInit {
 
   courseStatsEdata: IInteractEventEdata;

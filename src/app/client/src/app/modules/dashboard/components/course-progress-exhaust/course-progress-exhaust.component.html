@@ -161,6 +161,7 @@
           <th class="two wide UpReviewTableHeader">{{resourceService?.frmelmnts?.lbl?.courseProgressExhaustEmail}}</th>
           <th class="two wide UpReviewTableHeader">{{resourceService?.frmelmnts?.lbl?.courseProgressExhaustPhoneNo}}</th>
 
+          <th *ngIf="showCourseData" class="two wide UpReviewTableHeader">{{resourceService?.frmelmnts?.lbl?.courseProgressExhaustCourseName}}</th>
           <th *ngIf="showCourseData" class="two wide UpReviewTableHeader">{{resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchId}}</th>
           <th *ngIf="showCourseData" class="two wide UpReviewTableHeader">{{resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchName}}</th>
           <th *ngIf="showCourseData" class="two wide UpReviewTableHeader">{{resourceService?.frmelmnts?.lbl?.courseProgressExhaustBatchStartDate}}</th>
@@ -179,21 +180,22 @@
           <td class="content">{{courseProgressExhaust?.maskedemail}}</td>
           <td class="content">{{courseProgressExhaust?.maskedphone}}</td>
 
+          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.coursename}}</td>
           <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batchid}}</td>
-          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batch_name?.batch_name}}</td>
-          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batch_name?.batch_name}}</td>
-          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batch_name?.batch_name}}</td>
+          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batch_name?.batchname}}</td>
+          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batch_name?.batch_start_date}}</td>
+          <td *ngIf="showCourseData" class="content">{{courseProgressExhaust?.batch_name?.batch_end_date}}</td>
 
           <td class="content">{{courseProgressExhaust?.enrolled_date | date:'dd/MM/yyyy'}}</td>
           <td class="content">{{courseProgressExhaust?.completedon  | dateFormat :'DD/MM/YYYY'}} </td>
           <td class="content">{{courseProgressExhaust?.progress}}</td>
           <td class="content">{{courseProgressExhaust?.completionpercentage}}</td>
-          <td class="content">{{ courseProgressExhaust?.issued_certificate}}</td>
+          <td class="content">{{ courseProgressExhaust?.issued_certificates?.issued_certificate}}</td>
         </tr>
       </tbody>
     </table>
   </div>
-
+ 
   <div class="ui grid">
     <div class="two wide column"></div>
     <div class="ten wide column">

@@ -200,7 +200,7 @@
     },
     "ROLES": {
       "READ": "data/v1/role/read"
-    },
+    }, 
     "BATCH": {
       "CREATE": "course/v1/batch/create",
       "UPDATE": "course/v1/batch/update",
